@@ -1,0 +1,197 @@
+<div class="col-sm-12">
+	<div class="page-header">
+		<h2 class="subtitulo">{{titulo}}</h2>
+		<!--Botones de accion-->
+		<div class="pull-right">
+			<button type="button" class="btn btn-primary btn-sm" ng-show="btnNew == true"  ng-click="isBtnNew(true)"  title="Nuevo"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+			<button type="button" class="btn btn-success btn-sm" ng-disabled="usuarioForm.$invalid" ng-show="btnSave == true" ng-click="save()" title="Guardar"><span class="glyphicon glyphicon-ok"> Guardar</span></button>
+			<button type="button" class="btn btn-danger btn-sm" ng-show="btnSave == true" ng-click="isBtnNew(false)" title="Cancelar"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+		</div>
+	</div>
+	<br>
+	<!--Panel registro-->
+	<div class="register container" ng-show="btnSave == true">
+		<form name="usuarioForm" id="usuarioForm" >
+			<!--Cedula identidad-->
+			<div class="form-group col-sm-6" ng-class="{'has-error':usuarioForm.ci.$invalid && usuarioForm.ci.$touched}">
+				<label for="ci" class="hidden-xs">Cedula identidad: </label>
+				<div class="input-group">
+					<input type="number"  name="ci" placeholder="Cedula Identidad" min="0" minlength="7" maxlength="20" class="form-control" ng-model="actual.ci" ng-required="true">
+					<span class="input-group-addon">Expedido
+						<select   name="expedido" value="Expedido"  >
+						  <option>Seleccionar..</option>
+						  <option>Pando</option>
+						  <option>Beni</option>
+						  <option>Santa Cruz</option>
+						  <option>La Paz</option>
+						  <option>Cochabanba</option>
+						  <option>Tarija</option>
+						  <option>Chuquisaca</option>
+						  <option>Oruro</option>
+						  <option>Potosi</option>
+						</select>
+					</span>
+				</div>
+
+				<div class="col-sm-12">
+					<span ng-if="usuarioForm.ci.$invalid && usuarioForm.ci.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+					<span ng-if="usuarioForm.ci.$invalid && usuarioForm.ci.$touched" style="display:inline-block;" class="help-block">Este campo es requerido.</span>
+					<span ng-if="usuarioForm.ci.$error.minlength && usuarioForm.ci.$touched" class="help-block">Se requiere 7 digitos minimo</span>
+					<span ng-if="existCI" style="display:inline-block;color:red; " class="help-block">Este CI ya existe.</span>
+				</div>
+			</div>
+
+			<!--Tipo usuario-->
+			<div class="form-group col-sm-6" ng-init="getTipoUsuario()" ng-class="{'has-error':usuarioForm.tipousuario.$invalid && usuarioForm.tipousuario.$touched}">
+				<div class="col-sm-12 hidden-xs" style="margin:0; padding:0;">
+					<label for="tipousuario">Tipo usuario: </label>
+					<select name="tipousuario" ng-model="actual.tipousuario" class="form-control" value="Seleccionar" ng-options="value.id as value.nombre for value in tipousuarios" ng-required="true">
+					    <option>--</option>
+					</select>
+				</div>
+				<div class="col-sm-12 visible-xs" style="margin:0; padding:0;">
+					<div class="input-group">
+						<span class="input-group-addon">Tipo usuario: </span>
+						<select name="tipousuario" ng-model="actual.tipousuario" class="form-control" value="Seleccionar"
+						    ng-options="value.id as value.nombre for value in tipousuarios" ng-required="true">
+						    <option>--</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-sm-12">
+					<span ng-if="usuarioForm.tipousuario.$invalid && usuarioForm.tipousuario.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+					<span ng-if="usuarioForm.tipousuario.$invalid && usuarioForm.tipousuario.$touched" style="display:inline-block;" class="help-block">Este campo es requerido.</span>
+				</div>
+			</div>
+
+			<!-- Nombre apellido-->
+			<div class="col-sm-12" style="margin:0; padding:0;">
+				<div class="form-group col-sm-6"  ng-class="{'has-error':usuarioForm.nombre.$invalid && usuarioForm.nombre.$touched}">
+					
+
+					<div class="col-sm-12 hidden-xs" style="margin:0; padding:0;">
+						<label for="apellido" class="hidden-xs">Nombre: </label>
+						<input type="text" name="nombre" maxlength="40" placeholder="Introduce tu nombre completo" class="form-control"  ng-model="actual.nombre" ng-required="true">
+					</div>
+					<div class="col-sm-12 visible-xs" style="margin:0; padding:0;">
+						<div class="input-group">
+							<span class="input-group-addon">Nombre: </span>
+							<input type="text" name="nombre" maxlength="40" placeholder="Introduce tu nombre completo" class="form-control"  ng-model="actual.nombre" ng-required="true">
+						</div>
+					</div>
+					
+
+					<div class="col-sm-12">
+						<span ng-if="usuarioForm.nombre.$invalid && usuarioForm.nombre.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+						<span ng-if="usuarioForm.nombre.$invalid && usuarioForm.nombre.$touched" style="display:inline-block;" class="help-block">Este campo es requerido.</span>
+					</div>
+				</div>
+
+				<div class="form-group col-sm-6" ng-class="{'has-error':usuarioForm.apellido.$invalid && usuarioForm.apellido.$touched}">
+					<div class="col-sm-12 hidden-xs" style="margin:0; padding:0;">
+						<label for="apellido" class="hidden-xs">Apellido: </label>
+						<input type="text" name="apellido" maxlength="40" placeholder="Introduce tus apellidos" class="form-control" ng-model="actual.apellido" ng-required="true">
+					</div>
+					<div class="col-sm-12 visible-xs" style="margin:0; padding:0;">
+						<div class="input-group">
+							<span class="input-group-addon">Apellidos: </span>
+							<input type="text" name="apellido" maxlength="40" placeholder="Introduce tus apellidos" class="form-control" ng-model="actual.apellido" ng-required="true">
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+						<span ng-if="usuarioForm.apellido.$invalid && usuarioForm.apellido.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+						<span ng-if="usuarioForm.apellido.$invalid && usuarioForm.apellido.$touched" style="display:inline-block;" class="help-block">Este campo es requerido.</span>
+					</div>
+				</div>
+			</div>
+
+			<!--Telefono-->
+			<div class="form-group col-sm-6" ng-class="{'has-error':usuarioForm.telefono.$invalid && usuarioForm.telefono.$touched}">
+				<label for="telefono" class="hidden-xs">Telefono: </label>
+				<div class="input-group">
+					<span class="input-group-addon glyphicon glyphicon-phone"></span>
+					<input type="number" name="telefono" min="0" minlength="7" maxlength="20" placeholder="Numero telefonico" class="form-control"  ng-model="actual.telefono" ng-required="true">
+				</div>
+
+				<div class="col-sm-12">
+					<span ng-if="usuarioForm.telefono.$invalid && usuarioForm.telefono.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+					<span ng-if="usuarioForm.telefono.$invalid && usuarioForm.telefono.$touched" style="display:inline-block;" class="help-block">Este campo es requerido.</span>
+					<span ng-if="usuarioForm.telefono.$error.required && usuarioForm.telefono.$touched" class="help-block">El telefono no está en el formato correcto.</span>
+					<span ng-if="usuarioForm.telefono.$error.minlength && usuarioForm.telefono.$touched" class="help-block">Se requiere 7 digitos minimo</span>
+					<span ng-if="existTelefono" style="display:inline-block;color:red; " class="help-block">Este Telefono ya existe.</span>
+				</div>
+			</div>
+
+			<!--Correo-->
+			<div class="form-group col-sm-6" ng-class="{'has-error':usuarioForm.correo.$invalid && usuarioForm.correo.$touched}">
+				<label for="correo" class="hidden-xs">Correo electronico: </label>
+				<div class="input-group">
+					<span class="input-group-addon">@</span>
+					<input type="email" name="correo" maxlength="30" class="form-control"  ng-model="actual.correo"  placeholder="Correo electronico ej: usuario@correo.com"  ng-required="true">
+				</div>
+				<div class="col-sm-12">
+					<span ng-if="usuarioForm.correo.$invalid && usuarioForm.correo.$touched" class="glyphicon glyphicon-remove form-control-feedback" style="display:inline-block;"></span>
+					<span ng-if="usuarioForm.correo.$invalid && usuarioForm.correo.$touched" style="display:inline-block;" class="help-block">El correo electronico requerido.</span>
+					<span ng-if="existCorreo" style="display:inline-block; color:red; " class="help-block">Este Correo ya existe.</span>
+					<span ng-if="usuarioForm.correo.$error.email && usuarioForm.correo.$touched" class="help-block">El correo no está en el formato correcto, ej: <strong>usuario@correo.com</strong></span>
+					
+				  	<span ng-if="usuarioForm.correo.$error.required && usuarioForm.correo.$touched" class="help-block">El correo no está en el formato correcto, ej: <strong>usuario@correo.com</strong></span>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+
+	<!--Tablas-->
+	<div class="panel" ng-show="true">
+		<!--Boton de busqueda-->
+		<div class="panel-heading">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+				<input type="text" class="form-control" placeholder="Buscar usuario" ng-model="buscar">
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed table-striped" ng-init="getUsuarios()">
+				<thead>
+					<tr>
+						<th>CI</th>
+						<th>Nombres</th>
+						<th>Apellidos</th>
+						<th>Correo</th>
+						<th>Telefono</th>
+						<th>Tipo usuario</th>
+						<th>Estado</th>
+						<th>Controles basicos</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat = 'user in users | filter:buscar | startFromGrid: currentPage * pageSize | limitTo: pageSize'>
+						<td>{{user.ci}}</td>
+						<td>{{user.nombre | uppercase}}</td>
+						<td>{{user.apellido | uppercase}}</td>
+						<td>{{user.correo}}</td>
+						<td>{{user.telefono}}</td>
+						<td>{{user.tipousuario_id}}</td>
+						<td>{{user.estado}}</td>
+						<td>
+							<div class="btn-group btn-group-sm">
+								<button type="button" class="btn btn-warning btn-small" title="Modificar" ng-click="update(user.codigo)"><span class="glyphicon glyphicon-pencil hidden-md"></span><span class="hidden-xs"> Modificar</span></button>
+								<button type="button" class="btn btn-danger btn-small" title="Baja" ng-click="baja(user.codigo)" style="background: #EC776E;"><span class="glyphicon glyphicon-remove-sign hidden-md"></span><span class="hidden-xs"> Baja</span></button>
+								<button type="button" class="btn btn-danger btn-small" title="Eliminar" ng-click="delete(user.codigo)"><span class="glyphicon glyphicon-trash hidden-md"></span><span class="hidden-xs"> Eliminar</span></button>
+			    			</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!--Botones navegables-->
+		<div class="navegacion">
+			<button class="pagination pagination-lg" type="button" ng-disabled = "currentPage == 0" ng-click="currentPage = currentPage - 1">&laquo;</button>
+			<button class="pagination" type="button" ng-disabled = "currentPage == page.no - 1" ng-click="setPage(page.no)" ng-repeat="page in pages">{{page.no}}</button>
+			<button class="pagination pagination-sm" type="button" ng-disabled = "currentPage >= users.length/pageSize - 1" ng-click="currentPage = currentPage + 1">&raquo;</button>
+		</div>
+	</div>
+</div>

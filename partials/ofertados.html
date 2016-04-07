@@ -1,0 +1,127 @@
+<div class="col-sm-12">
+	<div class="page-header">
+		<h2 class="subtitulo">{{titulo}}</h2>
+		<!--Botones de accion-->
+		<div class="pull-right"  ng-show="btnReserve == true">
+			<button type="button" class="btn btn-success btn-sm" ng-show="btnReserve == true"  ng-disabled="isConect == 0" ng-click="save()"><span class="glyphicon glyphicon-ok"> Reservar</span></button>
+			<button type="button" class="btn btn-danger btn-sm" ng-show="btnReserve == true" ng-click="cancel()"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
+		</div>
+	</div>
+	<br>	
+	<!--Panel registro-->
+	<div class="register container"  ng-show="btnReserve == true">
+		<br><div class="col-sm-12">
+			<p class="col-sm-12">Para realizar la reserva del servicio llene todos los campos del siguiente formulario. </p>
+		</div><hr>
+
+		<form name="reservar">
+		<div class="col-sm-12">
+			<div class="col-sm-6" ng-init="getServicios()"  >
+				<label for="servicio">Servicios:</label>
+				<select ng-model="actual.servicio" class="form-control" name="servicio" 
+				    ng-options="value.codigo as value.nombre for value in servicios" required>
+				    <option>--</option>
+				</select>
+				<span ng-show="!reservar.$pristine && reservar.servicio.$error.required">Seleccione el Servicio.</span>
+				<br>
+			</div>
+		</div>
+		<div class="col-sm-12">
+
+			<div class="col-sm-6">
+				<label for="hora" >Fecha:</label>
+				<input list="fechas" class="form-control"  id="fecha" ng-model="actual.fechaInicio" placeholder="dd/mm/yy" required>
+			    <datalist id="fechas" >
+			        <select ng-init="obtenerFechas()">
+	                    <option ng-repeat="decha in fechasSemana" value="{{decha}}"></option>
+	                </select>
+			    </datalist> 
+				<span ng-show="!reservar.$pristine && reservar.fechaInicio.$error.required">La fecha es requerida.</span>
+				<br>
+			</div>
+		</div>
+
+		<div class="col-sm-12">
+		
+			<div class="col-sm-6">
+				<label for="hora" >Hora:</label>
+				<select class="form-control" ng-model="actual.hora" name="hora" required>
+				  <option>6:00 - 7:00</option>
+				  <option>7:00 - 8:00</option>
+				  <option>8:00 - 9:00</option>
+				  <option>9:00 - 10:00</option>
+				  <option>10:00 - 11:00</option>
+				  <option>11:00 - 12:00</option>
+				  <option>12:00 - 13:00</option>
+				  <option>13:00 - 14:00</option>
+				  <option>14:00 - 15:00</option>
+				  <option>15:00 - 16:00</option>
+				  <option>16:00 - 17:00</option>
+				  <option>17:00 - 18:00</option>
+				  <option>18:00 - 19:00</option>
+				  <option>19:00 - 20:00</option>
+				  <option>20:00 - 21:00</option>
+				  <option>21:00 - 22:00</option>
+				  <option>22:00 - 23:00</option>
+				</select>
+				<span ng-show="!reservar.$pristine && reservar.hora.$error.required">La hora es requerida.</span>
+				<br>
+			</div>
+		</div>
+		<div class="col-sm-12">
+
+			<div class="col-sm-6">
+				<label for="motivo" >Motivo:</label>
+				<textarea maxlength="150" name="motivo" class="form-control" ng-model="actual.motivo" placeholder="Introduzca un motivo"></textarea>
+			</div>
+		</div>
+</form>		
+
+	</div>
+
+	<!--Tablas-->
+	<div class="panel" ng-show="true">
+		<div class="col-sm-12">
+			<p class="col-sm-12">Para reservar un servicio haz click en seleccionar.</p>
+		</div><hr>
+		<!--boton de busqueda-->
+		<div class="panel-heading">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+				<input type="text" class="form-control" placeholder="Buscar servicio" ng-model="buscar.nombre">
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover table-condensed table-striped" ng-init="getServicesOfertados()">
+				<thead>
+					<tr>
+						<th>Codigo</th>
+						<th>Nombre</th>
+						<th>Descripcion</th>
+						<th>Controles</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat = 'service in services | filter:buscar| startFromGrid: currentPage * pageSize | limitTo: pageSize'>
+						<td>{{service.codigo}}</td>
+						<td>{{service.nombre | uppercase}}</td>
+						<td>{{service.descripcion | uppercase}}</td>
+						<td>
+							<div class="btn-group btn-group-sm">
+								<button type="button" class="btn btn-primary btn-small" ng-disabled="btnSeleccion == false" ng-click="seleccionar(service.codigo)"><span class="glyphicon glyphicon-edit" ></span> Seleccionar</button>
+		    				</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!--Botones navegables-->
+		<div class="navegacion">
+			<button class="pagination pagination-lg" type="button" ng-disabled = "currentPage == 0" ng-click="currentPage = currentPage - 1">&laquo;</button>
+			<button class="pagination" type="button" ng-disabled = "currentPage == page.no - 1" ng-click="setPage(page.no)" ng-repeat="page in pages">{{page.no}}</button>
+			<button class="pagination pagination-sm" type="button" ng-disabled = "currentPage >= services.length/pageSize - 1" ng-click="currentPage = currentPage + 1">&raquo;</button>
+		</div>
+	</div>
+
+
+</div>
