@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app='angularRoutingApp'>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<title>URBARI Comunidad de gente atractiva.</title>
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+	
+<!--
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-route.js"></script>
+-->
+
+  	<script src="lib/angular/angular.js"></script>
+  	<script src="lib/angular-route/angular-route.js"></script>
+  	<script src="lib/angular-cookies/angular-cookies.min.js"></script>
+  	<script src="js/common/locale_es-es.js"></script>
+</head>
+<body ng-controller='main' ng-cloack  ng-init="inicializar()">
+		
+	<script src="js/app.js"></script>
+    <script src="js/controllers/usuario.js"></script>
+    <script src="js/controllers/servicio.js"></script>
+    <script src="js/controllers/reserva.js"></script>
+    <script src="js/controllers/misreservas.js"></script>
+    <script src="js/controllers/ofertados.js"></script>
+    <script src="js/controllers/main.js"></script>
+    <script src="js/services/session.js"></script>
+  	<script>window.jQuery || document.write('<script src="lib/jquery/js/jquery.min.js"><\/script>')</script>
+  	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+
+
+	<header>
+		<div class="logo">
+			<figure>
+				<img src="img/logo.png" alt="Urbari" />
+			</figure>
+		</div>
+		<div class="titular">
+			<h1 class="titulo">URBARÍ</h1>
+			<a ng-hide="isConect == 0" for="nick" class="nick"><span class="glyphicon glyphicon-user"></span> {{actual.nick}}</a>
+			<a href="" ng-click="seeRegister()"  class="salir"><span class="glyphicon glyphicon-log-out"></span> {{loginOut}}</a>
+			<a href="" ng-show="isConect == 0" ng-click="seeSesion()" class="registrar btn-success"><span class="glyphicon glyphicon-log-in"></span> {{loginIn}}</a>
+		</div>
+	</header>
+
+	<nav class="navbar-default navbar-inverse navbar" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+	            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+			      <span class="sr-only">Desplegar navegación</span>
+			      <span class="icon-bar"></span>
+			      <span class="icon-bar"></span>
+			      <span class="icon-bar"></span>
+			    </button>
+			    <a href="#" class="navbar-brand"></a>
+	        </div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+	    		<ul class="nav navbar-nav">
+					<li ng-hide="isConect == 1 || isConect == 2" ng-click="inicializar()"><a href="#/inicio">Inicio</a></li>
+					<li ng-show="isConect == 1" ng-click="inicializar()"><a href="#/usuario">Usuario</a></li>
+					<li ng-show="isConect == 1" ng-click="inicializar()"><a href="#/servicio">Servicio</a></li>
+					<li ng-show="isConect == 2" ng-click="inicializar()"><a href="#/reserva">Reserva</a></li>
+					<li ng-show="isConect == 3" ng-click="inicializar()"><a href="#/servicios">Servicios</a></li>
+					<li ng-show="isConect == 3" ng-click="inicializar()"><a href="#/misreservas">Mis Reservas</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<section>
+		<div class="container">
+			<!-- Mensaje de alerta -->
+			<div class="alert alert-{{typeMsg}} alert-dismissable"  ng-show="showMsg == true">
+				<button type="button" class="close" data-dismiss="alert" ng-click="showMessage(false,'',0)">&times;</button>
+				<b>{{typeMsg}}:</b> {{message}}
+			</div>
+
+			<!-- Aquí incluimos las vistas registrar y session  -->
+			<div class="row" style="margin:0; padding:0px;" ng-include src=" 'partials/registrar.html' " ng-show="btnRegister == true"></div>
+			<div class="row" style="margin:0; padding:0px;" ng-include src=" 'partials/session.html' "   ng-show="btnSesion == true"></div>
+
+			<!-- Aquí inyectamos las vistas -->
+			<div ng-view>
+			</div>
+		</div>
+	</section>
+
+	<footer>
+		<h3>
+			<strong>Reservacion Urbari</strong>
+			<span class="mejor">Angular.JS</span>
+		</h3>
+	</footer>
+
+
+
+</body>
+</html>
